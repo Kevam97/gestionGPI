@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class SpecificObjective extends Model
 {
     use HasFactory;
+
+    protected $guarded = ['id'];
+
+    public function objective()
+    {
+        return $this->belongsTo(Objective::class);
+    }
 }
