@@ -25,4 +25,19 @@ class Project extends Model
     {
         return $this->belongsTo(Company::class);
     }
+
+    public function specificObjectives()
+    {
+        return $this->hasManyThrough(SpecificObjective::class, Objective::class);
+    }
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
+
+    public function subtasks()
+    {
+        return $this->hasMany(Subtask::class);
+    }
 }

@@ -7,6 +7,7 @@ use App\Filament\Resources\CompanyResource\RelationManagers;
 use App\Models\Company;
 use Filament\Forms;
 use Filament\Forms\Components\Card;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
@@ -35,6 +36,12 @@ class CompanyResource extends Resource
                         Forms\Components\TextInput::make('name')
                             ->required()
                             ->maxLength(255),
+                        TextInput::make('agent')
+                            ->required(),
+                        TextInput::make('email')
+                            ->email(),
+                        TextInput::make('phone')
+                            ->tel(),
                     ])
             ]);
     }

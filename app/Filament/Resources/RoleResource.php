@@ -6,6 +6,7 @@ use App\Filament\Resources\RoleResource\Pages;
 use App\Filament\Resources\RoleResource\RelationManagers;
 use Spatie\Permission\Models\Role;
 use Filament\Forms;
+use Filament\Forms\Components\Card;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
@@ -25,8 +26,12 @@ class RoleResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('name')
-                    ->required()
+                Card::make()
+                    ->schema([
+
+                    TextInput::make('name')
+                        ->required()
+                    ])
             ]);
     }
 
@@ -34,7 +39,7 @@ class RoleResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('name')
             ])
             ->filters([
                 //

@@ -3,20 +3,17 @@
 namespace App\Filament\Resources\ProjectResource\RelationManagers;
 
 use Filament\Forms;
-use Filament\Forms\Components\Card;
-use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
 use Filament\Tables;
-use Icetalker\FilamentTableRepeater\Forms\Components\TableRepeater;
+use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class ObjectivesRelationManager extends RelationManager
+class SubtasksRelationManager extends RelationManager
 {
-    protected static string $relationship = 'objectives';
+    protected static string $relationship = 'subtasks';
 
     protected static ?string $recordTitleAttribute = 'name';
 
@@ -24,19 +21,9 @@ class ObjectivesRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Card::make()
-                    ->schema([
-                        Forms\Components\TextInput::make('name')
-                            ->required()
-                            ->maxLength(255),
-
-                        TableRepeater::make('specificObjectives')
-                            ->relationship()
-                            ->schema([
-                                TextInput::make('name')
-                                    ->required()
-                            ]),
-                    ])
+                Forms\Components\TextInput::make('name')
+                    ->required()
+                    ->maxLength(255),
             ]);
     }
 
@@ -44,14 +31,22 @@ class ObjectivesRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('task.specificObjective.objective.name')
                     ->searchable(),
+                TextColumn::make('task.specificObjective.name')
+                    ->searchable(),
+                TextColumn::make('task.name')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('name')
+                    ->searchable()
+                    ->label('subtask'),
+                TextColumn::make('value')
+                    ->sortable()
             ])
             ->filters([
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

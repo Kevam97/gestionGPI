@@ -5,6 +5,9 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ProjectResource\Pages;
 use App\Filament\Resources\ProjectResource\RelationManagers;
 use App\Filament\Resources\ProjectResource\RelationManagers\ObjectivesRelationManager;
+use App\Filament\Resources\ProjectResource\RelationManagers\SpecificObjectivesRelationManager;
+use App\Filament\Resources\ProjectResource\RelationManagers\SubtasksRelationManager;
+use App\Filament\Resources\ProjectResource\RelationManagers\TasksRelationManager;
 use App\Models\Project;
 use Filament\Forms;
 use Filament\Forms\Components\Card;
@@ -15,6 +18,7 @@ use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Icetalker\FilamentTableRepeater\Forms\Components\TableRepeater;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -40,12 +44,14 @@ class ProjectResource extends Resource
                         Forms\Components\TextInput::make('name')
                             ->required()
                             ->maxLength(255),
-                        Repeater::make('objectives')
+                        TableRepeater::make('objectives')
                             ->relationship()
                             ->schema([
                                 TextInput::make('name')
                                     ->required()
-                            ])
+                            ]),
+                        TextInput::make('amount')
+                            ->numeric()
                     ])
             ]);
     }
@@ -77,6 +83,9 @@ class ProjectResource extends Resource
     {
         return [
             ObjectivesRelationManager::class,
+            SpecificObjectivesRelationManager::class,
+            TasksRelationManager::class,
+            SubtasksRelationManager::class
         ];
     }
 
