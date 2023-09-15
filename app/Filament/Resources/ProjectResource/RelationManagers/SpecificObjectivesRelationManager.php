@@ -2,15 +2,19 @@
 
 namespace App\Filament\Resources\ProjectResource\RelationManagers;
 
+use Closure;
 use Filament\Forms;
 use Filament\Forms\Components\Card;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Icetalker\FilamentTableRepeater\Forms\Components\TableRepeater;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -35,15 +39,32 @@ class SpecificObjectivesRelationManager extends RelationManager
                     ->relationship()
                     ->schema([
                         TextInput::make('name')
-                        ->required(),
+                            ->required(),
                         TextInput::make('value')
-                        ->numeric()
-                        ->required(),
+                            ->numeric()
+                            ->required(),
+                        DatePicker::make('start')
+                            ->required(),
+                        DatePicker::make('end')
+                            ->required(),
+                        Select::make('users')
+                            ->multiple()
+                            ->preload()
+                            ->relationship('users', 'name',
+                                fn(Builder $query, RelationManager $livewire) => $query->whereIn('id',$livewire->ownerRecord->user()->pluck('users.id')->toArray())
+                            ),
                         Hidden::make('project_id')
-                            ->default(function(RelationManager $livewire)
-                            {
-                                return $livewire->ownerRecord->id;
-                            })
+                            ->default(fn(RelationManager $livewire) => $livewire->ownerRecord->id)
+                    ])
+                    ->rules([
+                        function () {
+                            return function (string $attribute, $value, Closure $fail) {
+                                dd($value);
+                                // if ($value === 'foo') {
+                                //     $fail('The :attribute is invalid.');
+                                // }
+                            };
+                        },
                     ]),
                 ])
             ]);
@@ -55,12 +76,18 @@ class SpecificObjectivesRelationManager extends RelationManager
             ->columns([
                 TextColumn::make('objective.name')
                     ->searchable(),
+
                 Tables\Columns\TextColumn::make('name')
-                    ->searchable()
+                    ->searchable(query: function (Builder $query, string $search): Builder {
+                        return $query
+                            ->where('specific_objectives.name', 'like', "%{$search}%");
+                    })
                     ->label('Specific objective'),
             ])
             ->filters([
-                //
+                SelectFilter::make('objective')
+                    ->relationship('objective', 'name',
+                        fn (Builder $query, RelationManager $livewire) => $query->where('project_id', $livewire->ownerRecord->id))
             ])
             ->headerActions([
             ])

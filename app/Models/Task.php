@@ -11,9 +11,19 @@ class Task extends Model
 
     use HasFactory;
 
+    protected $casts = [
+        'start' => 'date',
+        'end' => 'date',
+    ];
+
     public function  specificObjective()
     {
         return $this->belongsTo(SpecificObjective::class);
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
     }
 
     public function subtasks()

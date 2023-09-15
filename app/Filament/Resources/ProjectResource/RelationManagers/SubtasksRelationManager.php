@@ -2,12 +2,15 @@
 
 namespace App\Filament\Resources\ProjectResource\RelationManagers;
 
+use App\Models\Objective;
+use App\Models\SpecificObjective;
 use Filament\Forms;
 use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -44,7 +47,16 @@ class SubtasksRelationManager extends RelationManager
                     ->sortable()
             ])
             ->filters([
-                //
+                SelectFilter::make('objective')
+                    ->options(fn(RelationManager $livewire) => Objective::where('project_id',$livewire->ownerRecord->id)->pluck('name','id')),
+                SelectFilter::make('specificObjective')
+                    ->options(fn(RelationManager $livewire) => SpecificObjective::whereHas('objective', function ($query)  use ($livewire){
+                        $query->where('project_id', $livewire->ownerRecord->id);
+                    })->with('objective')->pluck('name','id')),
+                SelectFilter::make('task')
+                    ->relationship('task', 'name',
+                        fn (Builder $query, RelationManager $livewire) => $query->where('project_id', $livewire->ownerRecord->id))
+
             ])
             ->headerActions([
             ])

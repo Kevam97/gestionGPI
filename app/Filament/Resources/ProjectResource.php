@@ -39,7 +39,9 @@ class ProjectResource extends Resource
                             ->relationship('company','name')
                             ->required(),
                         Select::make('user_id')
+                            ->multiple()
                             ->relationship('user','name')
+                            ->preload()
                             ->required(),
                         Forms\Components\TextInput::make('name')
                             ->required()
@@ -51,6 +53,7 @@ class ProjectResource extends Resource
                                     ->required()
                             ]),
                         TextInput::make('amount')
+                            ->required()
                             ->numeric()
                     ])
             ]);
