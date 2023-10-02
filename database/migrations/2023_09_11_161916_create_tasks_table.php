@@ -20,6 +20,7 @@ return new class extends Migration
             $table->time('start');
             $table->time('end');
             $table->json('documents')->nullable();
+            $table->boolean('status')->default(false);
             $table->timestamps();
         });
     }

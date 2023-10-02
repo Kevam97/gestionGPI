@@ -9,6 +9,7 @@
         "filament/filament": "^2.0",
         "guzzlehttp/guzzle": "^7.2",
         "icetalker/filament-table-repeater": "^1.0",
+        "invaders-xx/filament-kanban-board": "^0.4.0",
         "jeffgreco13/filament-breezy": "^1.5",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.2",
@@ -22,6 +23,7 @@
         "laravel/sail": "^1.18",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^7.0",
+        "pestphp/pest": "^2.20",
         "phpunit/phpunit": "^10.1",
         "spatie/laravel-ignition": "^2.0"
     },

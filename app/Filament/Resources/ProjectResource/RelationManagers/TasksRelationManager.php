@@ -4,6 +4,7 @@ namespace App\Filament\Resources\ProjectResource\RelationManagers;
 
 use App\Models\Objective;
 use App\Models\SpecificObjective;
+use Closure;
 use Filament\Forms;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Hidden;
@@ -16,6 +17,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Icetalker\FilamentTableRepeater\Forms\Components\TableRepeater;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class TasksRelationManager extends RelationManager
@@ -46,6 +48,29 @@ class TasksRelationManager extends RelationManager
                             {
                                 return $livewire->ownerRecord->id;
                             })
+                    ])
+                    ->rules([
+                        function (Model $record) {
+                            return function (string $attribute, $value, Closure $fail) use ($record) {
+                                $amount = 0;
+                                $amount_assigned = 0;
+
+                                foreach ($value as $key => $item) {
+                                    if (str_contains($key,'record') == false) {
+                                        $amount = $item['value'] + $amount;
+                                    }
+                                }
+
+                                foreach ($record->subtasks as  $subtask) {
+                                    $amount_assigned = $subtask->value + $amount_assigned;
+                                }
+
+                                if ($amount  > $record->value || ($amount_assigned + $amount) > $record->value ) {
+
+                                    $fail('Sobrepasa el presupuesto asignado a la actividad');
+                                }
+                            };
+                        },
                     ]),
                 ])
             ]);

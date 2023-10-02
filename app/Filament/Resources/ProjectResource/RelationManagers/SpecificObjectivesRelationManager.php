@@ -57,12 +57,25 @@ class SpecificObjectivesRelationManager extends RelationManager
                             ->default(fn(RelationManager $livewire) => $livewire->ownerRecord->id)
                     ])
                     ->rules([
-                        function () {
-                            return function (string $attribute, $value, Closure $fail) {
-                                dd($value);
-                                // if ($value === 'foo') {
-                                //     $fail('The :attribute is invalid.');
-                                // }
+                        function ( RelationManager $livewire) {
+                            return function (string $attribute, $value, Closure $fail) use ($livewire) {
+                                $amount = 0;
+                                $amount_assigned = 0;
+
+                                foreach ($value as $key => $item) {
+                                    if (str_contains($key,'record') == false) {
+                                        $amount = $item['value'] + $amount;
+                                    }
+                                }
+
+                                foreach ($livewire->ownerRecord->tasks as  $task) {
+                                    $amount_assigned = $task->value + $amount_assigned;
+                                }
+
+                                if ($amount  > $livewire->ownerRecord->amount || ($amount_assigned + $amount) > $livewire->ownerRecord->amount ) {
+
+                                    $fail('Sobrepasa el presupuesto asignado al proyecto');
+                                }
                             };
                         },
                     ]),

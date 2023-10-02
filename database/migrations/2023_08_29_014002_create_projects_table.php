@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('company_id')->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->double('amount');
+            $table->boolean('status')->default(false);
             $table->timestamps();
         });
     }

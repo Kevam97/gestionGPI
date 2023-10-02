@@ -14,9 +14,14 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
 
-        \App\Models\User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        $this->call(RoleSeeder::class);
+
+        $admin =\App\Models\User::factory()->create([
+            'name' => 'administrador',
+            'email' => 'admin@example.com',
         ]);
+
+        $admin->assignRole('admin');
+
     }
 }
