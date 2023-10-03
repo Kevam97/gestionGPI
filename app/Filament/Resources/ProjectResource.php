@@ -25,7 +25,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class ProjectResource extends Resource
 {
     protected static ?string $model = Project::class;
-
+    protected static ?string $modelLabel = 'Proyectos';
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 
     public static function form(Form $form): Form

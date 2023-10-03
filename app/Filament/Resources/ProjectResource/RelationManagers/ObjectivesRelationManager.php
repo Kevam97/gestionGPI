@@ -17,6 +17,8 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class ObjectivesRelationManager extends RelationManager
 {
     protected static string $relationship = 'objectives';
+    protected static ?string $modelLabel = "Objetivos";
+    protected static ?string $pluralModelLabel = "Objetivos";
 
     protected static ?string $recordTitleAttribute = 'name';
 

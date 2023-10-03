@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Hash;
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
-
+    protected static ?string $modelLabel = 'Usuarios';
     protected static ?string $navigationGroup = 'Gestion';
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 

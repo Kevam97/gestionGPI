@@ -23,7 +23,8 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class TasksRelationManager extends RelationManager
 {
     protected static string $relationship = 'tasks';
-
+    protected static ?string $modelLabel = "Actividades";
+    protected static ?string $pluralModelLabel = "Actividades";
     protected static ?string $recordTitleAttribute = 'name';
 
     public static function form(Form $form): Form
