@@ -22,7 +22,7 @@ class EditProject extends EditRecord
             Action::make('pdf')
                 ->action(function(){
                     $this->generatePDF();
-                    // return response()->download(public_path('storage/projects/' . $this->record->name.'.pdf'));
+                    return response()->download(public_path('storage/projects/' . $this->record->name.'.pdf'));
                 })
 
         ];
