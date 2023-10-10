@@ -45,6 +45,7 @@ class SubtasksRelationManager extends RelationManager
                     ->searchable()
                     ->label('subtask'),
                 TextColumn::make('value')
+                    ->formatStateUsing(fn (int $state): string => '$'.number_format($state,0))
                     ->sortable()
             ])
             ->filters([

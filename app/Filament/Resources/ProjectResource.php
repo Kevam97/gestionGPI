@@ -26,7 +26,7 @@ class ProjectResource extends Resource
 {
     protected static ?string $model = Project::class;
     protected static ?string $modelLabel = 'Proyectos';
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-document-duplicate';
 
     public static function form(Form $form): Form
     {
@@ -54,6 +54,7 @@ class ProjectResource extends Resource
                             ]),
                         TextInput::make('amount')
                             ->required()
+                            ->mask(fn (TextInput\Mask $mask) => $mask->money(prefix: '$', thousandsSeparator: ',', decimalPlaces: 0))
                             ->numeric()
                     ])
             ]);
@@ -63,13 +64,13 @@ class ProjectResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('company_id'),
-                Tables\Columns\TextColumn::make('user_id'),
-                Tables\Columns\TextColumn::make('name'),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime(),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime(),
+                Tables\Columns\TextColumn::make('company.name')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('name')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('amount')
+                    ->formatStateUsing(fn (int $state): string => '$'.number_format($state,0))
+                    ->searchable(),
             ])
             ->filters([
                 //

@@ -43,6 +43,7 @@ class SpecificObjectivesRelationManager extends RelationManager
                             ->required(),
                         TextInput::make('value')
                             ->numeric()
+                            ->mask(fn (TextInput\Mask $mask) => $mask->money(prefix: '$', thousandsSeparator: ',', decimalPlaces: 0))
                             ->required(),
                         DatePicker::make('start')
                             ->required(),

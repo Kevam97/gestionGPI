@@ -41,9 +41,10 @@ class TasksRelationManager extends RelationManager
                     ->relationship()
                     ->schema([
                         TextInput::make('name')
-                        ->required(),
+                            ->required(),
                         TextInput::make('value')
-                        ->required(),
+                            ->mask(fn (TextInput\Mask $mask) => $mask->money(prefix: '$', thousandsSeparator: ',', decimalPlaces: 0))
+                            ->required(),
                         Hidden::make('project_id')
                             ->default(function(RelationManager $livewire)
                             {
@@ -89,6 +90,7 @@ class TasksRelationManager extends RelationManager
                     ->searchable()
                     ->label('task'),
                 TextColumn::make('value')
+                    ->formatStateUsing(fn (int $state): string => '$'.number_format($state,0))
                     ->sortable()
             ])
             ->filters([
