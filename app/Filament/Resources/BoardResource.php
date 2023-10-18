@@ -2,16 +2,14 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\ProjectResource\Pages;
-use App\Filament\Resources\ProjectResource\RelationManagers;
-use App\Filament\Resources\ProjectResource\RelationManagers\ObjectivesRelationManager;
-use App\Filament\Resources\ProjectResource\RelationManagers\SpecificObjectivesRelationManager;
-use App\Filament\Resources\ProjectResource\RelationManagers\SubtasksRelationManager;
-use App\Filament\Resources\ProjectResource\RelationManagers\TasksRelationManager;
+use App\Filament\Resources\BoardResource\Pages;
+use App\Filament\Resources\BoardResource\RelationManagers;
+use App\Filament\Resources\BoardResource\RelationManagers\SubtasksRelationManager;
+use App\Filament\Resources\BoardResource\RelationManagers\TasksRelationManager;
+use App\Models\Board;
 use App\Models\Project;
 use Filament\Forms;
 use Filament\Forms\Components\Card;
-use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
@@ -21,12 +19,15 @@ use Filament\Tables;
 use Icetalker\FilamentTableRepeater\Forms\Components\TableRepeater;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
-class ProjectResource extends Resource
+class BoardResource extends Resource
 {
     protected static ?string $model = Project::class;
-    protected static ?string $modelLabel = 'Proyectos';
-    protected static ?string $navigationIcon = 'heroicon-o-document-duplicate';
+
+    protected static ?string $navigationIcon = 'heroicon-o-briefcase';
+    protected static ?string $modelLabel = 'Mis proyectos';
+    protected static ?string $slug = 'board';
 
     public static function form(Form $form): Form
     {
@@ -37,23 +38,21 @@ class ProjectResource extends Resource
 
                         Select::make('company_id')
                             ->relationship('company','name')
+                            ->disabled()
                             ->required(),
                         Select::make('user_id')
                             ->multiple()
                             ->relationship('user','name')
                             ->preload()
+                            ->disabled()
                             ->required(),
                         Forms\Components\TextInput::make('name')
                             ->required()
+                            ->disabled()
                             ->maxLength(255),
-                        TableRepeater::make('objectives')
-                            ->relationship()
-                            ->schema([
-                                TextInput::make('name')
-                                    ->required()
-                            ]),
                         TextInput::make('amount')
                             ->required()
+                            ->disabled()
                             ->mask(fn (TextInput\Mask $mask) => $mask->money(prefix: '$', thousandsSeparator: ',', decimalPlaces: 0))
                             ->numeric()
                     ])
@@ -86,24 +85,32 @@ class ProjectResource extends Resource
     public static function getRelations(): array
     {
         return [
-            ObjectivesRelationManager::class,
-            SpecificObjectivesRelationManager::class,
             TasksRelationManager::class,
-            SubtasksRelationManager::class
+            SubtasksRelationManager::class,
         ];
     }
 
     protected static function shouldRegisterNavigation(): bool
     {
-        return auth()->user()->hasRole('admin');
+        return auth()->user()->hasRole('manager');
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListProjects::route('/'),
-            'create' => Pages\CreateProject::route('/create'),
-            'edit' => Pages\EditProject::route('/{record}/edit'),
+            'index' => Pages\ListBoards::route('/'),
+            'create' => Pages\CreateBoard::route('/create'),
+            'edit' => Pages\EditBoard::route('/{record}/edit'),
         ];
     }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+                        ->whereHas('user', function($query){
+                            $query->where('users.id', Auth::id());
+                        });
+    }
+
+
 }
