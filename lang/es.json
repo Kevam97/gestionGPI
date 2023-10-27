@@ -49,7 +49,11 @@
     "Task":"Actividad",
     "Subtasks":"Subactividades",
     "subtask":"Subactividad",
-    "Status":"Estado"
+    "Status":"Estado",
+    "Documents":"Documentos",
+    "User":"Usuarios",
+    "Open project": "Abrir projecto",
+    "Close Project": "Cerrar Projecto"
 
 
 

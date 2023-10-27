@@ -3,6 +3,8 @@
 namespace App\Filament\Resources\ProjectResource\Pages;
 
 use App\Filament\Resources\ProjectResource;
+use App\Filament\Resources\ProjectResource\Widgets\BudgetOverview;
+use App\Filament\Resources\ProjectResource\Widgets\ObjectiveOverview;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Barryvdh\DomPDF\Pdf as document;
 use Filament\Pages\Actions;
@@ -23,7 +25,19 @@ class EditProject extends EditRecord
                 ->action(function(){
                     $this->generatePDF();
                     return response()->download(public_path('storage/projects/' . $this->record->name.'.pdf'));
+                }),
+            Action::make('status')
+                ->label(fn() => ($this->record->status) ? __("Open project") : __("Close Project"))
+                ->color(fn() => ($this->record->status) ? "warning" : "success")
+                ->action(function(){
+                    if ($this->record->status)
+                        $this->record->status = false;
+                    else
+                        $this->record->status = true;
+
+                    $this->record->save();
                 })
+                ->requiresConfirmation()
 
         ];
     }
@@ -31,6 +45,14 @@ class EditProject extends EditRecord
     public function hasCombinedRelationManagerTabsWithForm(): bool
     {
         return true;
+    }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            BudgetOverview::class,
+            ObjectiveOverview::class
+        ];
     }
 
     public function generatePDF()

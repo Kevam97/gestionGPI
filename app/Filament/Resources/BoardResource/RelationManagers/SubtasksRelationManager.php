@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class SubtasksRelationManager extends RelationManager
 {
-    protected static string $relationship = 'subtasks';
+    protected static string $relationship = 'boardSubtasks';
     protected static ?string $modelLabel = "Subactividades";
     protected static ?string $pluralModelLabel = "Subactividades";
     protected static ?string $recordTitleAttribute = 'name';

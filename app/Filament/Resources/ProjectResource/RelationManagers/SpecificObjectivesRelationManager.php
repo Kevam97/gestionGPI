@@ -13,6 +13,7 @@ use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Icetalker\FilamentTableRepeater\Forms\Components\TableRepeater;
@@ -98,6 +99,8 @@ class SpecificObjectivesRelationManager extends RelationManager
                             ->where('specific_objectives.name', 'like', "%{$search}%");
                     })
                     ->label('Specific objective'),
+                IconColumn::make('status')
+                    ->boolean()
             ])
             ->filters([
                 SelectFilter::make('objective')

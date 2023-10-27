@@ -9,6 +9,7 @@ use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
@@ -46,7 +47,9 @@ class SubtasksRelationManager extends RelationManager
                     ->label('subtask'),
                 TextColumn::make('value')
                     ->formatStateUsing(fn (int $state): string => '$'.number_format($state,0))
-                    ->sortable()
+                    ->sortable(),
+                IconColumn::make('status')
+                    ->boolean()
             ])
             ->filters([
                 SelectFilter::make('objective')

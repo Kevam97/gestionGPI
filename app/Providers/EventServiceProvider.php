@@ -4,9 +4,11 @@ namespace App\Providers;
 
 use App\Models\Company;
 use App\Models\Project;
+use App\Models\SpecificObjective;
 use App\Models\Subtask;
 use App\Models\Task;
 use App\Models\User;
+use App\Observers\SpecificObjectiveObserver;
 use App\Observers\SubtaskObserver;
 use App\Observers\TaskObserver;
 use App\Observers\UserObserver;
@@ -38,6 +40,9 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $observers = [
         User::class => [UserObserver::class],
+        Subtask::class =>[SubtaskObserver::class],
+        Task::class => [TaskObserver::class],
+        SpecificObjective::class => [SpecificObjectiveObserver::class]
     ];
 
     /**
