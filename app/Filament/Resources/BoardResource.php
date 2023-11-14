@@ -107,6 +107,7 @@ class BoardResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
+                        ->where('status',0)
                         ->whereHas('user', function($query){
                             $query->where('users.id', Auth::id());
                         });

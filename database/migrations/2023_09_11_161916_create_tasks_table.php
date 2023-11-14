@@ -17,8 +17,8 @@ return new class extends Migration
             $table->foreignId('project_id')->nullable()->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('name');
             $table->double('value');
-            $table->time('start');
-            $table->time('end');
+            $table->date('start');
+            $table->date('end');
             $table->json('documents')->nullable();
             $table->boolean('status')->default(false);
             $table->timestamps();

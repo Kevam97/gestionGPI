@@ -49,6 +49,7 @@ class SpecificObjectivesRelationManager extends RelationManager
                         DatePicker::make('start')
                             ->required(),
                         DatePicker::make('end')
+                            ->after('start')
                             ->required(),
                         Select::make('users')
                             ->multiple()

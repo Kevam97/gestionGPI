@@ -10,6 +10,10 @@ use Illuminate\Database\Eloquent\Builder;
 
 class ProjectsCompleted extends BaseWidget
 {
+
+    protected int | string | array $columnSpan = 'full';
+    protected static ?string $heading = 'Proyectos cerrados';
+
     protected function getTableQuery(): Builder
     {
         return Project::where('status',1);

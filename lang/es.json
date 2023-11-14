@@ -52,8 +52,9 @@
     "Status":"Estado",
     "Documents":"Documentos",
     "User":"Usuarios",
-    "Open project": "Abrir projecto",
-    "Close Project": "Cerrar Projecto"
+    "Open project": "Abrir proyecto",
+    "Close Project": "Cerrar Proyecto",
+    "Projects In Proccess" : "Proyectos en proceso"
 
 
 

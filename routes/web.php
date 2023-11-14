@@ -1,5 +1,9 @@
 <?php
 
+use App\Mail\NotificationTask;
+use App\Models\Task;
+use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +19,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return redirect('/admin');
+});
+
+Route::get('/email', function () {
+    Mail::to('kevil97@gmail.com')
+        ->send(new NotificationTask(Task::find(1),User::find(1)));
 });

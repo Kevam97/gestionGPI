@@ -10,6 +10,9 @@ use Illuminate\Database\Eloquent\Builder;
 
 class ProjectsInProccess extends BaseWidget
 {
+    protected int | string | array $columnSpan = 'full';
+    protected static ?string $heading = 'Proyectos en proceso';
+
     protected function getTableQuery(): Builder
     {
         return Project::where('status',0);
